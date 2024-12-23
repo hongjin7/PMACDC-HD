@@ -14,6 +14,24 @@ function variable_dc_converter(pm::_PM.AbstractPowerModel; kwargs...)
 
     variable_converter_to_grid_active_power(pm; kwargs...)
     variable_converter_to_grid_reactive_power(pm; kwargs...)
+
+    variable_conv_droop(pm; kwargs...)
+end
+
+"variable: 'k_droop[j]' for `j` in `convdc`"
+function variable_conv_droop(pm::_PM.AbstractPowerModel; nw::Int=_PM.nw_id_default, bounded::Bool=true, report::Bool=true)
+    kdr = _PM.var(pm, nw)[:k_droop] = JuMP.@variable(pm.model,
+        [i in _PM.ids(pm, nw, :convdc)], base_name="$(nw)_k_droop",
+        start=_PM.comp_start_value(_PM.ref(pm, nw, :convdc, i), "P_g", 0.1)
+    )
+    if bounded
+        for (c, convdc) in _PM.ref(pm, nw, :convdc)
+            JuMP.set_lower_bound(kdr[c], 0.001)
+            JuMP.set_upper_bound(kdr[c], 0.5)
+        end
+    end
+
+    report && _IM.sol_component_value(pm, _PM.pm_it_sym, nw, :convdc, :droop, _PM.ids(pm, nw, :convdc), kdr)
 end
 
 function variable_conv_tranformer_flow(pm::_PM.AbstractPowerModel; kwargs...)

@@ -2,10 +2,11 @@
 "variable: DC branch currents - not used"
 function variable_dcbranch_current(pm::_PM.AbstractPowerModel; kwargs...)
 end
+vdcm = nothing  # 在函数外部定义vdcm变量
 
-
-"variable: `vdcm[i]` for `i` in `dcbus`es"
 function variable_dcgrid_voltage_magnitude(pm::_PM.AbstractPowerModel; nw::Int=_PM.nw_id_default, bounded::Bool = true, report::Bool=true)
+    global vdcm  # 使用global关键字声明全局变量
+
     vdcm = _PM.var(pm, nw)[:vdcm] = JuMP.JuMP.@variable(pm.model,
     [i in _PM.ids(pm, nw, :busdc)], base_name="$(nw)_vdcm",
     start = _PM.comp_start_value(_PM.ref(pm, nw, :busdc, i), "Vdc", 1.0)
@@ -20,6 +21,23 @@ function variable_dcgrid_voltage_magnitude(pm::_PM.AbstractPowerModel; nw::Int=_
 
     report && _IM.sol_component_value(pm, _PM.pm_it_sym, nw, :busdc, :vm, _PM.ids(pm, nw, :busdc), vdcm)
 end
+
+# "variable: `vdcm[i]` for `i` in `dcbus`es"
+# function variable_dcgrid_voltage_magnitude(pm::_PM.AbstractPowerModel; nw::Int=_PM.nw_id_default, bounded::Bool = true, report::Bool=true)
+#     vdcm = _PM.var(pm, nw)[:vdcm] = JuMP.JuMP.@variable(pm.model,
+#     [i in _PM.ids(pm, nw, :busdc)], base_name="$(nw)_vdcm",
+#     start = _PM.comp_start_value(_PM.ref(pm, nw, :busdc, i), "Vdc", 1.0)
+#     )
+
+#     if bounded
+#         for (i, busdc) in _PM.ref(pm, nw, :busdc)
+#             JuMP.set_lower_bound(vdcm[i],  busdc["Vdcmin"])
+#             JuMP.set_upper_bound(vdcm[i],  busdc["Vdcmax"])
+#         end
+#     end
+
+#     report && _IM.sol_component_value(pm, _PM.pm_it_sym, nw, :busdc, :vm, _PM.ids(pm, nw, :busdc), vdcm)
+# end
 "variable: `vdcm[i]` for `i` in `dcbus`es"
 function variable_dcgrid_voltage_magnitude(pm::_PM.AbstractLPACModel; nw::Int=_PM.nw_id_default, bounded = true, report::Bool=true)
     phivdcm = _PM.var(pm, nw)[:phi_vdcm] = JuMP.JuMP.@variable(pm.model,

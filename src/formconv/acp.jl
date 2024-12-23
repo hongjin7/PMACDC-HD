@@ -139,16 +139,25 @@ function constraint_conv_firing_angle(pm::_PM.AbstractACPModel, n::Int, i::Int, 
     JuMP.@constraint(pm.model,   q == sin(phi) * S)
 end
 
-function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, vref_dc, pref, k_droop; dc_power = true)
-    pconv_dc = _PM.var(pm, n, :pconv_dc, i)
-    pconv_ac = _PM.var(pm, n, :pconv_ac, i)
-    vdc = _PM.var(pm, n, :vdcm, busdc_i)
+# function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, vref_dc, pref, k_droop; dc_power = true)
+#     pconv_dc = _PM.var(pm, n, :pconv_dc, i)
+#     pconv_ac = _PM.var(pm, n, :pconv_ac, i)
+#     vdc = _PM.var(pm, n, :vdcm, busdc_i)
 
-    if dc_power == true
-        JuMP.@constraint(pm.model, pconv_dc == pref -  1 / k_droop * (vdc - vref_dc))
-    else
-        JuMP.@constraint(pm.model, pconv_ac == pref -  1 / k_droop * (vdc - vref_dc))
-    end
+#     if dc_power == true
+#         JuMP.@constraint(pm.model, pconv_dc == pref -  1 / k_droop * (vdc - vref_dc))
+#     else
+#         JuMP.@constraint(pm.model, pconv_ac == pref -  1 / k_droop * (vdc - vref_dc))
+#     end
+# end
+
+##adaptive droop control
+function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int,i::Int, busdc_i, pref_dc, vref_dc, k_droop)
+    #pconv = _PM.var(pm,n, :pconv_dc, i)
+    pconv = _PM.var(pm,n, :pconv_ac, i)
+    vdc = _PM.var(pm,n, :vdcm, busdc_i)
+    k_dr = _PM.var(pm,n, :k_droop, i)
+    JuMP.@NLconstraint(pm.model, pconv == 0.01 * pref_dc - sign(pref_dc) * 1 / k_dr * (vdc - vref_dc))
 end
 
 function constraint_ac_voltage_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busac_i, v_ref, qref, kq_droop)

@@ -8,13 +8,13 @@ using XLSX
 model = Model(Ipopt.Optimizer)
 #register(model, :sign, 1, sign; autodiff = true)
 
-result = run_acdcopf("test/data/case5_acdc.m", ACPPowerModel, Ipopt.Optimizer)
+#result = run_acdcopf("test/data/case5_acdc.m", ACPPowerModel, Ipopt.Optimizer)
 #result = run_acdcopf("test/data/case32_g16out.m", ACPPowerModel, Ipopt.Optimizer);
 #result = run_acdcopf("test/data/case32_2conv4outage.m", ACPPowerModel, Ipopt.Optimizer);
 #result = run_acdcopf("test/data/case32_1.m", ACPPowerModel, Ipopt.Optimizer)
 #result = run_acdcopf("test/data/case32_2cutbr.m", ACPPowerModel, Ipopt.Optimizer);
-#result = run_acdcopf("test/data/case32_2.m", ACPPowerModel, Ipopt.Optimizer);
-#result = run_acdcopf("test/data/case32_2dconv.m", ACPPowerModel, Ipopt.Optimizer);
+result = run_acdcopf("test/data/case32_2.m", ACPPowerModel, Ipopt.Optimizer);
+#result = run_acdcopf("test/data/case32_2dconv.m", ACPPowerModel, Ipopt.Optimizer);#
 # Load the data
 gen_data = result["solution"]["gen"]
 bus_data = result["solution"]["bus"]
@@ -25,7 +25,7 @@ busdc_data = result["solution"]["busdc"]
 # gen_df = DataFrame(gen_id = collect(keys(gen_data)), pg = [x["pg"] for x in values(gen_data)], qg = [x["qg"] for x in values(gen_data)])
 # bus_df = DataFrame(bus_id = collect(keys(bus_data)), va = [x["va"] for x in values(bus_data)], vm = [x["vm"] for x in values(bus_data)])
 # #conv_df = DataFrame(conv_id = collect(keys(conv_data)), pconv = [x["pconv"] for x in values(conv_data)])
-# conv_df = DataFrame(conv_id = collect(keys(conv_data)), droop = [x["droop"] for x in values(conv_data)], pconv = [x["pconv"] for x in values(conv_data)])
+ conv_df = DataFrame(conv_id = collect(keys(conv_data)), droop = [x["droop"] for x in values(conv_data)], pconv = [x["pconv"] for x in values(conv_data)])
 # #conv_df =  DataFrame(conv_id = collect(keys(conv_data)), droop = [x["droop"] for x in values(conv_data)], pconv = [x["pconv"] for x in values(conv_data)], kfdr =  [x["k_fdroop"] for x in values(conv_data)])
 # busdc_df = DataFrame(bus_id = collect(keys(busdc_data)), vdc = [x["vm"] for x in values(busdc_data)])
 
