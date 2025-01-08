@@ -139,15 +139,41 @@ function constraint_conv_firing_angle(pm::_PM.AbstractACPModel, n::Int, i::Int, 
     JuMP.@constraint(pm.model,   q == sin(phi) * S)
 end
 
-function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, vref_dc, pref, k_droop; dc_power = true)
-    pconv_dc = _PM.var(pm, n, :pconv_dc, i)
-    pconv_ac = _PM.var(pm, n, :pconv_ac, i)
-    vdc = _PM.var(pm, n, :vdcm, busdc_i)
+#function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, vref_dc, pref, k_droop; dc_power = true)
+#    pconv_dc = _PM.var(pm, n, :pconv_dc, i)
+#    pconv_ac = _PM.var(pm, n, :pconv_ac, i)
+#    vdc = _PM.var(pm, n, :vdcm, busdc_i)
+#
+#    if dc_power == true
+#        JuMP.@constraint(pm.model, pconv_dc == pref -  1 / k_droop * (vdc - vref_dc))
+#    else
+#        JuMP.@constraint(pm.model, pconv_ac == pref -  1 / k_droop * (vdc - vref_dc))
+#    end
+#end
 
-    if dc_power == true
-        JuMP.@constraint(pm.model, pconv_dc == pref -  1 / k_droop * (vdc - vref_dc))
+## voltage & frequency droop control only for converter 1&2 
+function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, pref_dc, vref_dc, k_droop)
+    pconv = _PM.var(pm, n, :pconv_ac, i)
+    vdc = _PM.var(pm, n, :vdcm, busdc_i)
+    k_vdc = _PM.var(pm, n, :k_droop, i)
+    k_f = _PM.var(pm, n, :k_fdroop, i)
+    
+    # Use a predefined frequency value
+    f_values = [50, 50, 50, 50]
+    f = f_values[i]
+
+    if i <= 2
+        # For the first two converters, include k_f in the droop control
+        JuMP.@NLconstraint(
+            pm.model,
+            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc) - sign(pref_dc) * (1 / k_f) * (f - 50)
+        )
     else
-        JuMP.@constraint(pm.model, pconv_ac == pref -  1 / k_droop * (vdc - vref_dc))
+        # For the last two converters, set k_f to effectively "disable" droop control
+        JuMP.@NLconstraint(
+            pm.model,
+            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc)
+        )
     end
 end
 
