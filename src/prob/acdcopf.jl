@@ -24,6 +24,10 @@ function build_acdcopf(pm::_PM.AbstractPowerModel)
     variable_dcgrid_voltage_magnitude(pm)
 
     _PM.objective_min_fuel_cost(pm)
+    
+    #minimize voltage deviation
+    # nw = _PM.nw_id_default
+    # JuMP.@objective(pm.model, Min, sum(((vdcm[i]- 1)^2) for i in _PM.ids(pm, nw, :busdc)))
 
     _PM.constraint_model_voltage(pm)
     constraint_voltage_dc(pm)

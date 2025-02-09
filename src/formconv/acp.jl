@@ -166,13 +166,15 @@ function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, b
         # For the first two converters, include k_f in the droop control
         JuMP.@NLconstraint(
             pm.model,
-            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc) - sign(pref_dc) * (1 / k_f) * (f - 50)
+            #pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc) - sign(pref_dc) * (1 / k_f) * (f - 50)    #adaptive droop
+            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc) - sign(pref_dc) * (1 / 0.2505) * (f - 50)  #fixed droop
         )
     else
         # For the last two converters, set k_f to effectively "disable" droop control
         JuMP.@NLconstraint(
             pm.model,
-            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc)
+            #pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc)    #adaptive droop
+            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc)  #fixed droop
         )
     end
 end
