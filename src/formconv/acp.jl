@@ -151,30 +151,31 @@ end
 #    end
 #end
 
-## voltage & frequency droop control only for converter 1&2 
+# voltage & frequency droop control only for converter 1&2 
 function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busdc_i, pref_dc, vref_dc, k_droop)
     pconv = _PM.var(pm, n, :pconv_ac, i)
     vdc = _PM.var(pm, n, :vdcm, busdc_i)
-    k_vdc = _PM.var(pm, n, :k_droop, i)
-    k_f = _PM.var(pm, n, :k_fdroop, i)
+    kdr = _PM.var(pm, n, :k_droop, i)
+    #kfdr = _PM.var(pm, n, :k_fdroop)[i]
     
+
     # Use a predefined frequency value
-    f_values = [50, 50, 50, 50]
+    f_values = [49.8661, 49.8661, 49.8656, 49.8655]
     f = f_values[i]
 
     if i <= 2
         # For the first two converters, include k_f in the droop control
-        JuMP.@constraint(
+        JuMP.@NLconstraint(
             pm.model,
-            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc) - sign(pref_dc) * (1 / k_f) * (f - 50)    #adaptive droop
-            #pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc) - sign(pref_dc) * (1 / 0.2505) * (f - 50)  #fixed droop
+            #pconv ==  pref_dc - sign(pref_dc) * (1 / kdr) * (vdc - vref_dc) - sign(pref_dc) * (1 / kfdr) * (f-50)    #adaptive droop
+            pconv ==  pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc) - sign(pref_dc) * (1 / 0.53) * (f - 50)  #fixed droop
         )
     else
         # For the last two converters, set k_f to effectively "disable" droop control
-        JuMP.@constraint(
+        JuMP.@NLconstraint(
             pm.model,
-            pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_vdc) * (vdc - vref_dc)    #adaptive droop
-            #pconv == 0.01 * pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc)  #fixed droop
+            #pconv ==  pref_dc - sign(pref_dc) * (1 / kdr) * (vdc - vref_dc)    #adaptive droop
+            pconv ==  pref_dc - sign(pref_dc) * (1 / k_droop) * (vdc - vref_dc)  #fixed droop
         )
     end
 end
