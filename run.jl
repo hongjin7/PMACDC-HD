@@ -9,11 +9,11 @@ model = Model(Ipopt.Optimizer)
 #register(model, :sign, 1, sign; autodiff = true)
 
 #result = run_acdcopf("test/data/case5_acdc.m", ACPPowerModel, Ipopt.Optimizer)
-#result = run_acdcopf("test/data/case32_g16out.m", ACPPowerModel, Ipopt.Optimizer);
+result = run_acdcopf("test/data/case32_g16out.m", ACPPowerModel, Ipopt.Optimizer);
 #result = run_acdcopf("test/data/case32_2conv4outage.m", ACPPowerModel, Ipopt.Optimizer);
 #result = run_acdcopf("test/data/case32_1.m", ACPPowerModel, Ipopt.Optimizer)
 #result = run_acdcopf("test/data/case32_2cutbr.m", ACPPowerModel, Ipopt.Optimizer);
-result = run_acdcopf("test/data/case32_2.m", ACPPowerModel, Ipopt.Optimizer);
+#result = run_acdcopf("test/data/case32_2.m", ACPPowerModel, Ipopt.Optimizer);
 #result = run_acdcopf("test/data/case32_2dconv.m", ACPPowerModel, Ipopt.Optimizer);
 # Load the data
 gen_data = result["solution"]["gen"]
