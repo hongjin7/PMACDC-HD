@@ -160,9 +160,9 @@ function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, b
     
 
     # Use a predefined frequency value
-    f_values = [49.5572,  49.5574, 49.5568, 49.5569]
+    f_values = [49.7764, 49.7764, 49.7763, 50]
     f = f_values[i]
-    kfdr_total = [0.5065, 0.5052, 0, 0]
+    kfdr_total = [0.99955727, 0.530918093, 0, 0]
     kfd = kfdr_total[i]
     if i <= 2
         # For the first two converters, include k_f in the droop control
