@@ -27,7 +27,7 @@ function variable_conv_droop(pm::_PM.AbstractPowerModel; nw::Int=_PM.nw_id_defau
     if bounded
         for (c, convdc) in _PM.ref(pm, nw, :convdc)
             JuMP.set_lower_bound(kdr[c], 0.001)
-            JuMP.set_upper_bound(kdr[c], 0.5)
+            JuMP.set_upper_bound(kdr[c], 1)
         end
     end
 
