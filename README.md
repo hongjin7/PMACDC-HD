@@ -42,7 +42,7 @@ Each branch independently solves the corresponding OPF problem and provides stea
     ```bash
     git checkout active-power-control
     git checkout adaptive-droop-control
-    git checkout optimal-droop-control
+    git checkout vf-droop-control
     ```
 4. Run the run.jl to compute steady-state operating points.
 
