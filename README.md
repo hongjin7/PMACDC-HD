@@ -34,7 +34,7 @@ Each branch independently solves the corresponding OPF problem and provides stea
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/[your-github-username]/PMACDC-HD.jl.git
+    git clone https://github.com/hongjin7/PMACDC-HD.git
     cd PMACDC-HD.jl
     ```
 2. Install [Julia](https://julialang.org/) (v1.7 or above) and the required dependencies listed in `Project.toml`.
