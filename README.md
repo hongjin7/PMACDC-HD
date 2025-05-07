@@ -1,6 +1,7 @@
 # PMACDC-HD.jl
 
 **PMACDC-HD.jl** (PowerModelsACDC for Hybrid Droop Control)  
+
 This repository contains the optimization models and case studies in the paper 'Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems' written by Hongjin Du under the supervision of Pedro P. Vergara, Peter Palensky, Aleksandra Lekić.
 
 ## Overview
@@ -58,11 +59,18 @@ Each branch independently solves the corresponding OPF problem and provides stea
 
 If you use this repository or the developed models in your work, please cite:
 
+H. Du, T. B. Hashfi, R. Prasad, P. P. Vergara, P. Palensky, and A. Lekić,  “Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems,” *arXiv preprint* arXiv:2505.03651, 2025. Available: [https://arxiv.org/abs/2505.03651](https://arxiv.org/abs/2505.03651)
+
+
+### BibTeX
+
+```bibtex
 @misc{du2025optimal,
-    title={Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems},
-    author={Hongjin Du and Tuanku Badzlin Hashfi and Rashmi Prasad and Pedro P. Vergara and Peter Palensky and Aleksandra Lekić},
-    year={2025},
-    eprint={2505.03651},
-    archivePrefix={arXiv},
-    primaryClass={eess.SY}
+  title={Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems},
+  author={Hongjin Du and Tuanku Badzlin Hashfi and Rashmi Prasad and Pedro P. Vergara and Peter Palensky and Aleksandra Leki{\'c}},
+  year={2025},
+  eprint={2505.03651},
+  archivePrefix={arXiv},
+  primaryClass={eess.SY}
 }
+
