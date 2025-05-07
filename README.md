@@ -1,7 +1,7 @@
 # PMACDC-HD.jl
 
 **PMACDC-HD.jl** (PowerModelsACDC for Hybrid Droop Control)  
-This repository contains the optimization models and case studies in the paper 'Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems' written by Hongjin Du.
+This repository contains the optimization models and case studies in the paper 'Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems' written by Hongjin Du under the supervision of Pedro P. Vergara, Peter Palensky, Aleksandra Lekić.
 
 ## Overview
 
@@ -58,10 +58,11 @@ Each branch independently solves the corresponding OPF problem and provides stea
 
 If you use this repository or the developed models in your work, please cite:
 
-```bibtex
-@misc{hj_modifiedpkg_2025,
-  author       = {Hongjin Du},
-  title        = {Modified version of {PowerModelsACDC.jl} for customized optimization routines},
-  year         = {2025},
-  howpublished = {\url{https://github.com/hongjin7/PMACDC-HD}},
+@misc{du2025optimal,
+    title={Optimal Droop Control Strategy for Coordinated Voltage Regulation and Power Sharing in Hybrid AC-MTDC Systems},
+    author={Hongjin Du and Tuanku Badzlin Hashfi and Rashmi Prasad and Pedro P. Vergara and Peter Palensky and Aleksandra Lekić},
+    year={2025},
+    eprint={2505.03651},
+    archivePrefix={arXiv},
+    primaryClass={eess.SY}
 }
