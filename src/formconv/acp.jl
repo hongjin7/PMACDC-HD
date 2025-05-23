@@ -152,12 +152,12 @@ end
 # end
 
 ##adaptive droop control
-function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int,i::Int, busdc_i, pref_dc, vref_dc, k_droop)
+function constraint_dc_droop_control(pm::_PM.AbstractACPModel, n::Int,i::Int, busdc_i, pref_dc, vref_dc, k_droop; dc_power = true)
     #pconv = _PM.var(pm,n, :pconv_dc, i)
     pconv = _PM.var(pm,n, :pconv_ac, i)
     vdc = _PM.var(pm,n, :vdcm, busdc_i)
     k_dr = _PM.var(pm,n, :k_droop, i)
-    JuMP.@NLconstraint(pm.model, pconv == 0.01 * pref_dc - sign(pref_dc) * 1 / k_dr * (vdc - vref_dc))
+    JuMP.@constraint(pm.model, pconv == pref_dc - sign(pref_dc) * 1 / k_dr * (vdc - vref_dc))
 end
 
 function constraint_ac_voltage_droop_control(pm::_PM.AbstractACPModel, n::Int, i::Int, busac_i, v_ref, qref, kq_droop)
